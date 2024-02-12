@@ -106,6 +106,8 @@ flowchart TD
     end
 ```
 
+> ***Note:** Representation of a simplified interaction between Users, Applications, and a Database Management System (DBMS).*
+
 Additionally, a Database Management System (DBMS) must ensure the security of the stored information in the database, even in the event of system failure or unauthorized access attempts. Data in a DBMS can be shared among various users. To facilitate this, a DBMS must provide methods for database sharing.
 
 Due to the critical importance of information in the majority of organizations, the database is a valuable resource. This has led to the development of a broad range of concepts and techniques for the efficient management of data.
@@ -174,45 +176,182 @@ To simplify the interaction of these users with the system, there is the externa
 
 ```mermaid
 flowchart TD
-  subgraph id["External Level"]
-    a["Vision 1"]
-    b["Vision 2"]
-    c["Vision n"]
-  end
-  e --> id
-  d --> e
-  e["Conceptual Level"]
-  d["Internal Level"]
+    e["Conceptual Level"]
+    d["Internal Level"]
+    subgraph id["External Level"]
+        a["View 1"]
+        b["View 2"]
+        c["View 3"]
+    end
 
+    id --- e
+    e --- d
 ```
+
+> ***Note:** Illustration of a three-level database architecture: Conceptual (abstract design), External (user views), and Internal (physical implementation).*
 
 #
 
+### Data Definition Language (DDL)
+
+A database schema is specified by a set of definitions expressed in a special language called Data Definition Language (DDL). The result of executing DDL statements is a set of tables stored in a special file called a data dictionary (or data directory).
+
+A data dictionary is a file containing metadata, which means "data about the data." This file is consulted before actual data is read or modified in the database system.
+
+#
+
+### Data Manipulation Language (DML)
+
+Data manipulation involves retrieving information stored in the database, inserting new information, and removing information from the database. At the physical level, it is necessary to define algorithms that allow efficient access to data. At higher levels of abstraction, the emphasis is on ease of use, aiming to provide efficient human interaction with the system.
+
+A Data Manipulation Language (DML) is a language that allows users to access or manipulate data organized by an appropriate data model.
+
+#
+
+### Data Model
+
+A data model is a collection of conceptual tools for describing data, relationships between data, semantics, and data constraints. Various data models have been proposed and are divided into three groups:
+
+- Object-based models;
+- Record-based models;
+- Physical models.
+
+The models we will focus on are the record-based models.
+
+**Record-Based Models**
+
+Record-based logical models are used in describing data at the conceptual and external (view) levels. These models are employed to specify both the overall logical structure of the database and a high-level description of the implementation.
+
+```mermaid
+classDiagram
+    direction LR
+    class Customer {
+        - customerId: int
+        - name: string
+        - address: string
+        + getInformation(): string
+    }
+    
+    class Account {
+        - accountId: int
+        - balance: float
+        + deposit(amount: float): void
+        + withdraw(amount: float): void
+    }
+    
+    class CustomerAccount {
+        - customer: Customer
+        - account: Account
+    }
+    
+    Customer --|> CustomerAccount
+    CustomerAccount <|-- Account
+```
+
+> ***Note:** Representation of a basic class diagram illustrating the relationship between Customer, Account, and CustomerAccount classes.*
+
+#
+
+**Relational Model**
+
+In the relational model, data and the relationships between them are represented by a collection of tables, each with a number of columns. To illustrate this, consider a database consisting of details about courses, students, and enrollments in a school.
+
+Table **Courses**
+
+| CourseID | CourseName       | Department    | Credits |
+|----------|------------------|---------------|---------|
+| 101      | Introduction to Programming | Computer Science | 3 |
+| 102      | English Composition | English       | 4 |
+| 103      | Algebra            | Mathematics   | 3 |
+
+Table **Students**
+
+| StudentID | StudentName      | Major          | GradeLevel |
+|-----------|------------------|----------------|------------|
+| 201       | Alice Johnson    | Computer Science | 2          |
+| 202       | Bob Smith        | English        | 1          |
+| 203       | Charlie Brown    | Mathematics    | 3          |
 
 
+Table **Enrollments**
+
+| EnrollmentID | StudentID | CourseID | Semester  |
+|--------------|-----------|----------|-----------|
+| 1            | 201       | 101      | Spring    |
+| 2            | 202       | 102      | Fall      |
+| 3            | 203       | 103      | Summer    |
 
 
+In this example:
 
+- The **Courses** table contains information about the courses offered by the school.
+- The **Students** table stores details about the students and their major fields of study.
+- The **Enrollments** table records the enrollments of students in specific courses during particular semesters.
 
+The shared variable here is **StudentID**, which is used to connect the **Students** and **Enrollments** tables, and **CourseID**, which links the **Courses** and **Enrollments** tables. This model represents the many-to-many relationship between students and courses through the enrollment table.
 
+#
 
+**Network Model**
 
+In the network model, data is represented by collections of records, and the relationships between data are represented by links, which can be seen as pointers. The records in the database are organized as collections of graphs.
 
+```mermaid
+graph LR
+  Employee
+  Department
+  Project
+  Task
+  Meeting
 
+  Employee --> Department
+  Employee --> Project
+  Employee --> Meeting
+  Project --> Task
+  Task --> Employee
+  Meeting --> Project
+  Department --> Project
+  Department --> Meeting
 
+```
 
+> ***Note:** This model highlights interconnected data points, showcasing the networked structure where entities are linked to one another, reflecting a network database design.*
 
+#
 
+**Hierarchical Model**
 
+The hierarchical model is similar to the network model in that data and relationships are represented by records and links, respectively. However, the hierarchical model differs from the network model because records are organized as collections of trees instead of graphs.
 
+```mermaid
+graph TD
+  A[Organization] --> B[Department 1]
+  A --> C[Department 2]
+  B --> D[Team 1.1]
+  B --> E[Team 1.2]
+  C --> F[Team 2.1]
+  C --> G[Team 2.2]
+```
 
+> ***Note:** This diagram represents a hierarchical relationship in a structured organizational framework.*
 
+#
 
+### Client/Server Database
 
+In the Client/Server architecture, the database resides on a computer called the server, and its information is shared by multiple users running applications on their local computers (clients). This architecture provides greater data integrity since all users work with the same information. 
 
+The Client/Server architecture significantly reduces network traffic, as it only returns the requested data to the user. For example, in a database with a hundred thousand records, if a search finds only three records, only those three records are sent over the network to the client machine.
 
----
+#
 
+### Distributed Databases 
+
+A distributed database is one that is not entirely stored in a single physical location but is dispersed across a network of geographically distant computers connected by communication links. As a simplified example, consider a bank system in which the customer account database is distributed among the bank's branches, with each individual customer account record stored at the customer's local branch. 
+
+In other words, the data is stored where it is most frequently used but is still available (via communication network) to users from other locations. The advantages of this distribution are clear, combining the efficiency of local processing (without communication overhead) in most operations with all the inherent benefits of databases. However, there are also disadvantages, such as potential communication overhead and significant technical challenges in implementing such a system.
+
+The main goal in a distributed system is to appear, to the user, as a centralized system. That is, the user typically does not need to know where a specific portion of the data is physically stored. Therefore, the fact that the database is distributed should only be relevant at the internal level and not at the external and conceptual levels.
 
 
 ## The Relational Model
@@ -222,3 +361,9 @@ flowchart TD
 ## The SQL Language
 
 ---
+
+<!-- 
+
+https://www.devmedia.com.br/guia/guia-completo-de-sql/38314#organizacao
+
+https://www.alura.com.br/artigos/o-que-e-sql
