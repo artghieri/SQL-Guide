@@ -285,9 +285,7 @@ The Enrollments table records the enrollments of students in specific courses du
 
 > ***Note:** Table enrollments.*
 
-The relational model orchestrates a symphony of data and relationships through its table-based structure. Illustrated by a school database encompassing courses, students, and enrollments, this model proves its efficiency in capturing and organizing diverse information.
-
-In summary, the relational model transcends data representation, creating a structured narrative in the ever-evolving landscape of information management. With simplicity and efficiency, it continues to be a cornerstone in the realm of organized, accessible, and dynamic data systems.
+The relational model transcends data representation, creating a structured narrative in the ever-evolving landscape of information management. With simplicity and efficiency, it continues to be a cornerstone in the realm of organized, accessible, and dynamic data systems.
 
 #
 
@@ -313,7 +311,6 @@ graph LR
   Meeting --> Project
   Department --> Project
   Department --> Meeting
-
 ```
 
 > ***Note:** This model highlights interconnected data points, showcasing the networked structure where entities are linked to one another, reflecting a network database design.*
@@ -330,10 +327,10 @@ The hierarchical model brings forth a structured and hierarchical approach to da
 graph TD
   A[Organization] --> B[Department 1]
   A --> C[Department 2]
-  B --> D[Team 1.1]
-  B --> E[Team 1.2]
-  C --> F[Team 2.1]
-  C --> G[Team 2.2]
+  B --> D[Team 1.A]
+  B --> E[Team 1.B]
+  C --> F[Team 2.A]
+  C --> G[Team 2.B]
 ```
 
 > ***Note:** This diagram represents a hierarchical relationship in a structured organizational framework.*
@@ -376,18 +373,280 @@ Today’s large enterprise databases often support very complex queries and are 
 
 Addressing all of these challenges can be time-consuming and can prevent database administrators from performing more strategic functions.
 
-
-
 ## The Relational Model
+
+The first database systems were based on the hierarchical or network model. In June 1970, Dr. E.F. Codd wrote in the article "A Relational Model of Data for Shared Data Banks," which was considered the first design of a relational model for a database system. The relational model uses a collection of tables to represent both data and the relationships among those data. Each table has multiple columns, and each column has a unique name - tables are also known as relations. 
+
+Record-based models are so named because the database is structured in fixed-format records of several types. Each table contains records of a particular type. Each record type defines a fixed number of fields, or attributes. The columns of the table correspond to the attributes of the record type. The relational data model is the most widely used data model, and a vast majority of current database systems are based on the relational model.
+
+| EmployeeID | EmployeeName | DepartmentID | Salary |
+|------------|--------------|--------------|--------|
+| 1          | John Smith   | 101          | 50000  |
+| 2          | Jane Doe     | 102          | 60000  |
+| 3          | Bob Johnson  | 101          | 55000  |
+
+> ***Note:**  The relational model is an example of a record-based model.*
+
+In the years following the introduction of the relational model, substantial theory was developed for relational databases. This theory assists in the design of relational databases and the efficient processing of information requests made by database users.
 
 #
 
+### Relation
+
+
+As the name suggests, a relation is the "raw material" for building the entire theory of the relational model and, consequently, is the theoretical foundation of every database system based on the relational model. 
+
+In relational database systems, relations are represented through tables. A table is typically an entity identified in the system analysis process being implemented.
+
+| MovieID | Title                   | Director         | Genre     | ReleaseYear |
+|:-------:|-------------------------|------------------|:---------:|:-----------:|
+| 1       | The Shawshank Redemption| Frank Darabont   | Drama     | 1994        |
+| 2       | Inception               | Christopher Nolan| Sci-Fi    | 2010        |
+| 3       | Jurassic Park           | Steven Spielberg | Adventure | 1993        |
+| 4       | The Matrix              | Lana Wachowski   | Action    | 1999        |
+
+> ***Note:** Example of a relation model.*
+
+#
+
+**What is the Relational Model?**
+
+The relational model represents how data is stored in Relational Databases. A relational database consists of a collection of tables, each of which is assigned a unique name. Consider a relation PRODUCTS with attributes such as ProductID, ProductName, Category, Price, QuantityInStock, and Supplier.
+
+| ProductID | ProductName       | Category     | Price   | QuantityInStock | Supplier         |
+|-----------|-------------------|--------------|---------|------------------|------------------|
+| 1         | Laptop            | Electronics  | $899.99 | 50               | ABC Electronics  |
+| 2         | Coffee Maker      | Appliances   | $49.95  | 30               | XYZ Home Goods   |
+| 3         | Running Shoes     | Apparel      | $79.99  | 100              | Sports Emporium  |
+| 4         | Desk Chair        | Furniture    | $129.50 | 20               | Furniture World  |
+
+#
+
+**Important Terminologies**
+
+**Attribute**   
+Attributes are the properties that define an entity. For example, in the PRODUCTS relation, the attributes include *ProductID, ProductName, Category, Price, QuantityInStock, and Supplier*.
+
+
+**Relation Schema**  
+A relation schema defines the structure of the relation and represents the name of the relation with its attributes. For instance, the PRODUCTS relation schema is defined as: **PRODUCTS** (*ProductID, ProductName, Category, Price, QuantityInStock,* and *Supplier*).
+
+
+**Tuple**  
+Each row in the relation is known as a tuple. The PRODUCTS relation, for example, contains multiple tuples, and one of them is represented as follows:
+
+<table align = "center">
+  <tr>
+    <td>1</td>
+    <td>Laptop</td>
+    <td>Electronics</td>
+    <td>$899.99</td>
+    <td>50</td>
+    <td>ABC Electronics</td>
+  </tr>
+</table>
+
+
+**Relation Instance**  
+The set of tuples of a relation at a particular instance of time is called a relation instance. The table displays the relation instance of the PRODUCTS table at a specific time. It can change whenever there is an insertion, deletion, or update in the database.
+
+
+**Degree**  
+The number of attributes in the relation is known as the degree of the relation. The PRODUCTS relation defined above has a degree of 6.
+
+<table align = "center">
+  <tr>
+    <td>ProductID</td>
+    <td>ProductName</td>
+    <td>Category</td>
+    <td>Price</td>
+    <td>QuantityInStock</td>
+    <td>Supplier</td>
+  </tr>
+</table>
+
+**Cardinality**  
+The number of tuples in a relation is known as cardinality. The PRODUCTS relation defined above has cardinality 4.
+<table align="center">
+  <tr>
+    <td>1</td>
+    <td>Laptop</td>
+    <td>Electronics</td>
+    <td>$899.99</td>
+    <td>50</td>
+    <td>ABC Electronics</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Coffee Maker</td>
+    <td>Appliances</td>
+    <td>$49.95</td>
+    <td>30</td>
+    <td>XYZ Home Goods</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Running Shoes</td>
+    <td>Apparel</td>
+    <td>$79.99</td>
+    <td>100</td>
+    <td>Sports Emporium</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Desk Chair</td>
+    <td>Furniture</td>
+    <td>$129.50</td>
+    <td>20</td>
+    <td>Furniture World</td>
+  </tr>
+</table>
+
+**Column**   
+The column represents the set of values for a particular attribute. The column ProductID is extracted from the PRODUCTS relation.
+
+<table align = "center">
+  <tr>
+    <td>ProductID</td>
+  </tr>
+  <tr align = "center">
+    <td>1</td>
+  </tr>
+  <tr align = "center">
+    <td>2</td>
+  </tr>
+  <tr align = "center">
+    <td>3</td>
+  </tr>
+  <tr align = "center">
+    <td>4</td>
+  </tr>
+</table>
+
+**NULL Values**   
+The value which is not known or unavailable is called a NULL value. It is represented by a blank space. For instance, in the PRODUCTS table, if the Supplier information for a particular product is not known, it can be represented as NULL.
+
+| ProductID | ProductName       | Category     | Price   | QuantityInStock | Supplier         |
+|-----------|-------------------|--------------|---------|------------------|------------------|
+| 1         | Laptop            | Electronics  | $899.99 | 50               |   |
+
+**Relation Key**   
+These are basically the keys that are used to identify the rows uniquely or also help in identifying tables. In the PRODUCTS table, the ProductID can be considered a Primary Key as it uniquely identifies each product. These are of the following types:
+
+| Term          | Description                                       |
+|---------------|---------------------------------------------------|
+| Primary Key   | A unique identifier for each record in a table.   |
+| Candidate Key | A unique key that could be used as a primary key. |
+| Super Key     | A set of attributes that uniquely identifies a record. |
+| Foreign Key   | A field in one table that refers to the primary key in another table. |
+| Alternate Key | A candidate key that is not selected as the primary key. |
+| Composite Key | A key composed of two or more attributes to uniquely identify a record. |
+
+#
+
+### Relational Algebra
+
+Relational algebra is a set of operations performed on relations. Each operation uses one or more relations as its operands and produces another relation as the result. The operations traditionally used in set theory (***union, intersection, difference, and Cartesian product***) can also be defined in terms of relations. In all operations, except for the Cartesian product, the two operand relations must be union-compatible, meaning they must have the same structure.
+
+**Union**  
+The **union** of two relations, $A$ and $B$, in relational algebra is defined as the set comprising all tuples that belong to either $A$ or $B$. 
+
+In simpler terms, when performing the union operation between relations $A$ and $B$, the result is a new relation that includes all tuples present in $A$, all tuples present in $B$, and eliminates duplicates, ensuring that each tuple appears only once in the final result.
+
+![image](https://github.com/artghieri/SQL-Guide/assets/102708433/8e1fd1af-5a97-461c-bec7-e779da2ee09f)
+
+> ***Note:** The union between the tlabes A and B.*
+
+#
+
+**Intersection**  
+The **intersection** of two relations, $A$ and $B$, in relational algebra is defined as the set comprising all tuples that simultaneously belong to both $A$ and $B$. 
+
+When applying the intersection operation between relations $A$ and $B$, the result is a new relation that includes only those tuples that are common to both sets. It provides a subset of tuples shared by both relations $A$ and $B$. This operation proves useful for identifying common elements between two datasets or tables, helping to extract relevant information present in both sets.
+
+![image](https://github.com/artghieri/SQL-Guide/assets/102708433/ae7b972c-39c0-466b-8b38-aa11c1085aeb)
+
+> ***Note:** The intersection between the tables A and B.*
+
+#
+
+**Difference**  
+The **difference** between two relations, $A$ and $B$ (in that order), in relational algebra is defined as the set comprising all tuples that belong to $A$ but do not belong to $B$. 
+
+To elaborate, when executing the difference operation on relations $A$ and $B$, the result is a new relation that includes only those tuples found in $A$ but not in $B$. It provides a subset of tuples unique to the first relation, excluding any tuples common to both sets. This operation proves valuable for extracting specific information from one dataset while excluding elements shared with another, facilitating the comparison and analysis of distinct data sources.
+
+![image](https://github.com/artghieri/SQL-Guide/assets/102708433/944c2589-77c9-42a1-98dd-4d0fc2e5bac5)
+
+> ***Note:** The difference between the tables A and B (A - B).*
+
+#
+
+**Cartesian Product**   
+The **Cartesian Product** of two relations, $A$ and $B$, in relational algebra is defined as the set comprising all tuples, denoted as $t$, where each $t$ is the concatenation of a tuple $a$ from $A$ with a tuple $b$ belonging to $B$. 
+
+When performing the Cartesian product operation between relations $A$ and $B$, the result is a new relation containing all possible combinations of tuples from $A$ and $B$. Each tuple in the resulting Cartesian product represents a pairing of a tuple from $A$ with every tuple from $B$. This operation is particularly useful for exploring all possible combinations of data from two sets and is often employed in database queries and relational algebra expressions.
+
+![image](https://github.com/artghieri/SQL-Guide/assets/102708433/8b2349c7-0a7c-4f79-82ad-b4f046ae2f46)
+
+> ***Note:** The Cartesian Product between the tables A and B.*
+
+#
+
+**Selection**  
+The algebraic **selection** operator, denoted by σ (sigma), performs the operation of generating a *horizontal* subset of a specified relation. 
+
+This operation involves filtering the tuples (rows) within the relation based on a criterion specified by the condition. The result is a subset that includes only the tuples satisfying the given condition. This selection process is crucial for extracting relevant information from a dataset or table, allowing users to focus on specific aspects that meet predetermined criteria. The σ operator is a fundamental tool in the relational algebra, providing a means to refine and tailor datasets according to specified conditions.
+
+![image](https://github.com/artghieri/SQL-Guide/assets/102708433/da489d35-4f40-4cfc-a673-36cfd9842211)
+
+> ***Note:** The selection between the tables A and B.*
+
+#
+
+**Projection**  
+The **projection** operator in relational algebra performs the operation of generating a *vertical* subset of a given relation. In other words, it produces a subset that is obtained by selecting specific attributes (columns) from the original relation.
+
+This operation proves invaluable for data analysis and database query optimization. By vertically selecting specific attributes, the projection operator simplifies the dataset, making it easier to comprehend and analyze. It facilitates the creation of more concise and relevant subsets, focusing on the information essential to a particular analysis or application.
+
+![image](https://github.com/artghieri/SQL-Guide/assets/102708433/ce491e9f-9f2f-4f0c-b82d-fdc057c97845)
+
+> ***Note:** The projection between the tables A and B.*
+
+#
+
+### Advantages of the Relational Model
+
+The main advantage of the relational database model is that it provides an intuitive way to represent data and facilitates access to related data points. As a result, relational databases are more commonly used by organizations that need to manage large amounts of structured data, ranging from inventory tracking to processing transactional data for generating application records.
+
+There are many other advantages to using relational databases to manage and store your data, including:
+
+**Flexibility:**
+It is easy to add, update, or delete tables, relationships, and make other changes to data whenever necessary, without altering the overall structure of the database or affecting existing applications.
+
+**ACID Compliance:**
+Relational databases adhere to ACID (Atomicity, Consistency, Isolation, Durability) performance to ensure data validity regardless of errors, failures, or other potential issues.
+
+**User-Friendly:**
+Executing complex queries using SQL is straightforward. This allows even non-technical users to learn how to interact with the database.
+
+**Collaboration:**
+Multiple individuals can operate and access data simultaneously. Built-in locking prevents simultaneous access to data when it is being updated.
+
+**Integrated Security:**
+Role-based security ensures that access to data is limited to specific users.
+
+**Database Normalization:**
+Relational databases employ a design technique known as normalization, reducing redundancy and improving data integrity.
+
 ## The SQL Language
 
----
+
+
+
+
+
 
 <!-- 
-
 https://www.devmedia.com.br/guia/guia-completo-de-sql/38314#organizacao
 
 https://www.alura.com.br/artigos/o-que-e-sql
