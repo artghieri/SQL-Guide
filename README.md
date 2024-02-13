@@ -640,9 +640,81 @@ Relational databases employ a design technique known as normalization, reducing 
 
 ## The SQL Language
 
+Although SQL is often referred to as a query language, it possesses capabilities beyond querying a database. SQL has features for defining data structures, modifying data in the database, and specifying security and integrity constraints.
 
+The [original version of SQL](https://learnsql.com/blog/history-ms-sql-server/) was developed at IBM's research laboratory. Initially named SEQUEL, this language was implemented as part of the [System R Project](https://en.wikipedia.org/wiki/IBM_System_R) in the early 1970s. The SEQUEL language evolved, and its name was changed to SQL (Structured Query Language). SQL has become the established standard language for querying relational databases. 
 
+Several Database Management Systems support the SQL language. While there are various versions of SQL with some differences among them, the SQL structure has remained unchanged since its inception.
 
+A committee was established to standardize the language, aiming to make it platform-independent. The SQL standard is defined by the American National Standards Institute (ANSI).
+
+#
+
+### SQL Commands
+
+In general, SQL commands are instructions or queries used to interact with a relational database. These SQL instructions enable individuals or applications to perform various operations, such as retrieving, inserting, updating, and deleting data in database tables.
+
+SQL commands are categorized into several specific languages, each with its own purpose and function. 
+
+**Data Query Language (DQL)**
+
+The SQL language provides a versatile and powerful set of commands for interacting with relational databases. One fundamental aspect of SQL is the capability to retrieve data from databases, and the primary command used for this purpose is the **SELECT* command. The **SELECT** command is an integral part of the Data Query Language (DQL) within SQL.
+
+The **SELECT** command allows users to retrieve specific information or subsets of data from one or more tables within a database. It offers various clauses and options that enable users to customize their queries, including specifying which columns to retrieve, filtering data based on specific conditions, sorting results, and joining multiple tables.
+
+#
+
+**Data Definition Language (DDL)**
+
+SQL Data Definition Language (DDL) plays a crucial role in managing the structure and organization of a relational database. DDL commands are responsible for defining, modifying, and maintaining the database schema, which includes specifying the tables, their attributes, and the relationships between them. 
+
+Additionally, DDL commands facilitate the creation and management of other database objects, such as indexes. The DDL commands are:  **CREATE**, **ALTER**, and **DROP**. 
+
+#
+
+**Data Manipulation Language (DML)**
+
+Structured Query Language (SQL) Data Manipulation Language (DML) is a powerful set of commands that facilitate the interaction with relational databases. It encompasses a query language grounded in relational algebra and relational calculus, providing a structured and effective way to manage data. 
+
+The primary objective of SQL DML is to manipulate the data stored in a database, allowing users to perform various operations such as inserting, updating, and deleting records. The DML commands are:  **INSERT**, **UPDATE**, and **DELETE**.
+
+#
+
+**Data Control Language (DCL)**
+
+SQL Data Control Language (DCL) is a crucial subset of SQL that is responsible for managing user access and permissions within a relational database system. DCL primarily involves user registration and the assignment of privileges, determining the level of access and control users have over various database objects. 
+
+Two key commands in SQL DCL are **GRAN**T and **REVOKE**, and understanding how to use these commands is essential for ensuring data security and integrity in a database environment.
+
+#
+
+**Data Transaction Control (DTL)**
+
+The management of transactions is a crucial aspect of ensuring data consistency, integrity, and reliability in a database system. Transactions are sequences of one or more SQL statements that are executed as a single unit of work, ensuring that either all the statements within the transaction are completed successfully, or none of them are.
+
+Transaction management is essential in multi-user environments where multiple transactions may be occurring simultaneously. These commands provide the flexibility to commit changes when they are deemed correct and roll back changes when errors or unforeseen issues arise. The DTL commands are: **COMMIT**, **ROLLBACK**, and **SAVEPOINT**.
+
+#
+
+### Data Types
+
+The data types in the SQL language vary depending on the version and manufacturer. The initial version, emerging around 1970, did not include data types for storing multimedia information such as sound, image, and video, which are commonplace today. 
+
+Most Database Management Systems have incorporated these new data types into their versions of the SQL language. The types listed below are part of the ANSI 92 standard set of SQL data types.
+
+| Data Type           | Description                                                                                                      |
+| -------------- | --------------------------------------------------------------------------------------------------------------- |
+| **char(n)**        | Fixed-size storage for alphanumeric characters of length **n**.                                                     |
+| **varchar(n)**     | Variable-length string with a maximum size of **n** characters.                                                       |
+| **integer**        | Fixed-size integer numeric data.                                                                                |
+| **decimal(n, m)**  | Data with variable size, where **n** is the total number of digits, and **m** is the number of decimal places. |
+| **bit(n)**           | Sequence of **n** bits.                                                                                             |
+| **time**           | Fixed-size time data.                                                                                           |
+| **date**           | Fixed-size date data.                                                                                           |
+
+> ***Note:** SQL data types.*
+
+---
 
 
 
