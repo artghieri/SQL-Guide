@@ -29,7 +29,7 @@ Data within the most common types of databases in operation today is typically m
 | 2      | "To Kill a Mockingbird" | Harper Lee  | Fiction   | 1960              | 978-0-06-112008-4|
 | 3      | "1984"              | George Orwell    | Dystopian  | 1949              | 978-0-452-28423-4|
 
-> ***Note:** Example of a database table*
+> ***Note:** Example of a database table.*
 
 In this example, each *row* represents information about a specific book, and each *column* represents a different attribute of the books. The table allows for efficient organization, retrieval, and management of data related to the library's book inventory.
 
@@ -106,7 +106,7 @@ flowchart TD
     end
 ```
 
-> ***Note:** Representation of a simplified interaction between Users, Applications, and a Database Management System (DBMS).*
+> ***Note:** Representation of a simplified interaction between Users, Applications, and a DBMS.*
 
 Additionally, a Database Management System (DBMS) must ensure the security of the stored information in the database, even in the event of system failure or unauthorized access attempts. Data in a DBMS can be shared among various users. To facilitate this, a DBMS must provide methods for database sharing.
 
@@ -121,7 +121,7 @@ Basically, a Database Management System (DBMS) is nothing more than a computer-b
 **Hardware**  
 It consists of the means of data storage – disks, tapes, etc. – where the database resides, along with the devices associated with these means.
 
-**Data:**  
+**Data**  
 The data stored in the system is distributed in one or more databases. A database is a repository of stored data, generally integrated and shared.
 - *Integrated:* The database can be imagined as the unification of various files, eliminating total or partial redundancy among them.
   
@@ -212,9 +212,9 @@ A Data Manipulation Language (DML) is a language that allows users to access or 
 
 A data model is a collection of conceptual tools for describing data, relationships between data, semantics, and data constraints. Various data models have been proposed and are divided into three groups:
 
-- Object-based models;
-- Record-based models;
-- Physical models.
+- Object-Based Models
+- Record-Based Models
+- Physical Models
 
 The models we will focus on are the record-based models.
 
@@ -256,15 +256,16 @@ classDiagram
 
 In the relational model, data and the relationships between them are represented by a collection of tables, each with a number of columns. To illustrate this, consider a database consisting of details about courses, students, and enrollments in a school.
 
-Table **Courses**
-
 | CourseID | CourseName       | Department    | Credits |
 |----------|------------------|---------------|---------|
 | 101      | Introduction to Programming | Computer Science | 3 |
 | 102      | English Composition | English       | 4 |
 | 103      | Algebra            | Mathematics   | 3 |
 
-Table **Students**
+> ***Note:** Table courses.*
+
+In this example, the Courses table contains information about the courses offered by the school. The Students table stores details about the students and their major fields of study.
+
 
 | StudentID | StudentName      | Major          | GradeLevel |
 |-----------|------------------|----------------|------------|
@@ -272,8 +273,9 @@ Table **Students**
 | 202       | Bob Smith        | English        | 1          |
 | 203       | Charlie Brown    | Mathematics    | 3          |
 
+> ***Note:** Table students.*
 
-Table **Enrollments**
+The Enrollments table records the enrollments of students in specific courses during particular semesters. The shared variables here are StudentID, which is used to connect the Students and Enrollments tables, and CourseID, which links the Courses and Enrollments tables. This model represents the many-to-many relationship between students and courses through the enrollment table.
 
 | EnrollmentID | StudentID | CourseID | Semester  |
 |--------------|-----------|----------|-----------|
@@ -281,14 +283,11 @@ Table **Enrollments**
 | 2            | 202       | 102      | Fall      |
 | 3            | 203       | 103      | Summer    |
 
+> ***Note:** Table enrollments.*
 
-In this example:
+The relational model orchestrates a symphony of data and relationships through its table-based structure. Illustrated by a school database encompassing courses, students, and enrollments, this model proves its efficiency in capturing and organizing diverse information.
 
-- The **Courses** table contains information about the courses offered by the school.
-- The **Students** table stores details about the students and their major fields of study.
-- The **Enrollments** table records the enrollments of students in specific courses during particular semesters.
-
-The shared variable here is **StudentID**, which is used to connect the **Students** and **Enrollments** tables, and **CourseID**, which links the **Courses** and **Enrollments** tables. This model represents the many-to-many relationship between students and courses through the enrollment table.
+In summary, the relational model transcends data representation, creating a structured narrative in the ever-evolving landscape of information management. With simplicity and efficiency, it continues to be a cornerstone in the realm of organized, accessible, and dynamic data systems.
 
 #
 
@@ -352,6 +351,27 @@ A distributed database is one that is not entirely stored in a single physical l
 In other words, the data is stored where it is most frequently used but is still available (via communication network) to users from other locations. The advantages of this distribution are clear, combining the efficiency of local processing (without communication overhead) in most operations with all the inherent benefits of databases. However, there are also disadvantages, such as potential communication overhead and significant technical challenges in implementing such a system.
 
 The main goal in a distributed system is to appear, to the user, as a centralized system. That is, the user typically does not need to know where a specific portion of the data is physically stored. Therefore, the fact that the database is distributed should only be relevant at the internal level and not at the external and conceptual levels.
+
+#
+
+### Database Challenges
+
+Today’s large enterprise databases often support very complex queries and are expected to deliver nearly instant responses to those queries. As a result, database administrators are constantly called upon to employ a wide variety of methods to help improve performance. Some common challenges that they face include:
+
+- **Absorbing significant increases in data volume:** The explosion of data coming in from sensors, connected machines, and dozens of other sources keeps database administrators scrambling to manage and organize their companies’ data efficiently.
+
+- **Ensuring data security:** Data breaches are happening everywhere these days, and hackers are getting more inventive. It’s more important than ever to ensure that data is secure but also easily accessible to users.
+
+- **Keeping up with demand:** In today’s fast-moving business environment, companies need real-time access to their data to support timely decision-making and to take advantage of new opportunities.
+
+- **Managing and maintaining the database and infrastructure:** Database administrators must continually watch the database for problems and perform preventative maintenance, as well as apply software upgrades and patches. As databases become more complex and data volumes grow, companies are faced with the expense of hiring additional talent to monitor and tune their databases.
+
+- **Removing limits on scalability:** A business needs to grow if it’s going to survive, and its data management must grow along with it. But it’s very difficult for database administrators to predict how much capacity the company will need, particularly with on-premises databases.
+
+- **Ensuring data residency, data sovereignty, or latency requirements:** Some organizations have use cases that are better suited to run on-premises. In those cases, engineered systems that are pre-configured and pre-optimized for running the database are ideal. Customers achieve higher availability, greater performance, and up to 40% lower cost with Oracle Exadata, according to [Wikibon’s recent analysis (PDF)](https://www.oracle.com/a/ocom/docs/wikibon-cloud-database-battle.pdf).
+
+Addressing all of these challenges can be time-consuming and can prevent database administrators from performing more strategic functions.
+
 
 
 ## The Relational Model
