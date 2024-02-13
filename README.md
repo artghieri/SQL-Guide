@@ -293,7 +293,9 @@ In summary, the relational model transcends data representation, creating a stru
 
 **Network Model**
 
-In the network model, data is represented by collections of records, and the relationships between data are represented by links, which can be seen as pointers. The records in the database are organized as collections of graphs.
+The network model is a paradigm in database management where data takes the form of collections of records, intricately connected by relationships represented as links. In this model, these links can be envisioned as pointers, guiding the way from one record to another. The database's structure under the network model is akin to organized collections of graphs, providing a dynamic and interconnected framework for efficient data representation.
+
+Unlike the tabular organization of the relational model, the network model introduces a more intricate arrangement where records are connected through links. Each record holds information, and the links establish relationships between them. This structure enables the representation of complex and interrelated data scenarios, making it particularly suitable for applications with intricate dependencies.
 
 ```mermaid
 graph LR
@@ -321,6 +323,8 @@ graph LR
 **Hierarchical Model**
 
 The hierarchical model is similar to the network model in that data and relationships are represented by records and links, respectively. However, the hierarchical model differs from the network model because records are organized as collections of trees instead of graphs.
+
+The hierarchical model brings forth a structured and hierarchical approach to data representation, utilizing trees to capture relationships among records. While it may not suit every data scenario, its simplicity and alignment with hierarchical real-world relationships make it a valuable model in specific applications. 
 
 ```mermaid
 graph TD
