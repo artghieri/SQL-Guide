@@ -716,6 +716,13 @@ Most Database Management Systems have incorporated these new data types into the
 
 ---
 
+### Conclusion
+
+In conclusion, the purpose of this introduction is to pave the way for a comprehensive exploration of the SQL universe in the forthcoming guide. We have embarked on a journey to familiarize enthusiasts and passionate individuals with the foundational aspects of SQL, recognizing its widespread relevance in projects globally. Our preliminary discussions have offered a glimpse into the essential tools and techniques necessary for effectively manipulating and extracting valuable information from databases.
+
+Consider this introduction as an invitation to all those who share a fervor for the programming universe. Whether you are a novice student eager to commence your SQL journey or a seasoned professional seeking to broaden your expertise, the [subsequent guide](https://github.com/artghieri/SQL-Guide/blob/main/guide.md) is tailored to enrich your experience.
+
+This guide sets the stage for a deeper dive into SQL, where we will delve into specific commands and practices to empower you in effectively managing and querying databases. Stay tuned for a detailed exploration of SQL commands and their practical applications in the realm of data management.
 
 
 <!-- 
