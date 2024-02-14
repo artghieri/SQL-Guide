@@ -707,7 +707,7 @@ Most Database Management Systems have incorporated these new data types into the
 | **char(n)**        | Fixed-size storage for alphanumeric characters of length **n**.                                                     |
 | **varchar(n)**     | Variable-length string with a maximum size of **n** characters.                                                       |
 | **integer**        | Fixed-size integer numeric data.                                                                                |
-| **decimal(n, m)**  | Data with variable size, where **n** is the total number of digits, and **m** is the number of decimal places. |
+| **decimal(n, m)**  | Data with variable size, **n** is the total number of digits, and **m** is the number of decimal places. |
 | **bit(n)**           | Sequence of **n** bits.                                                                                             |
 | **time**           | Fixed-size time data.                                                                                           |
 | **date**           | Fixed-size date data.                                                                                           |
