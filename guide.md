@@ -1,9 +1,12 @@
 ## Introduction
 
+Our preliminary discussions have provided a glimpse into the essential tools and techniques required for effective manipulation and extraction of valuable information from databases. This guide serves as an invitation to enthusiasts and passionate individuals alike, beckoning them to explore the richness of SQL.
+
+In the upcoming chapters, we will meticulously dissect specific SQL commands and practices, empowering you with the knowledge and skills needed to proficiently manage and query databases. Whether you are a newcomer eager to grasp the fundamentals or a seasoned practitioner looking to refine your techniques, our guide is tailored to enhance your SQL experience.
 
 ## Data Definition Language (DDL)
 
-Data Definition Language (DDL) is a specific set of SQL instructions that provides a means for creating, altering, and deleting tables and indexes.
+Data Definition Language (DDL) constitutes a specialized set of SQL instructions designed to facilitate the creation, alteration, and deletion of tables and indexes within a relational database. These commands are fundamental in defining and managing the structure of the database itself, shaping the way data is organized and accessed.
 
 ```mermaid
 erDiagram
@@ -12,6 +15,12 @@ erDiagram
         varchar(20) name
     }
 ```
+
+> ***Note:** Relational-model representation of the table Departament*
+
+DDL enable database administrators and developers to define the structure, constraints, and relationships between data elements. The ability to create, alter, and delete tables and indexes empowers users to adapt the database schema to evolving requirements, ensuring a robust and well-defined foundation for data management.
+
+As a result, DDL commands are crucial in establishing the framework that governs how data is organized, stored, and accessed within a relational database system.
 
 # 
 
@@ -350,7 +359,71 @@ This action revokes the indexing structure on the specified column or columns, a
 
 It's crucial to exercise caution when removing indexes, as doing so may impact the performance of queries that relied on those indexes for speedy data access. Additionally, consider the potential consequences on write operations (inserts, updates, deletes) when deciding to remove indexes, as these operations might be influenced by the presence or absence of certain indexes.
 
-##
+## Data Manipulation Language (DML)
+
+Data Manipulation Language (DML) constitutes a critical aspect of Structured Query Language (SQL), focusing specifically on the manipulation and management of data within a relational database. DML commands empower users to interact with the data stored in tables, providing a versatile set of operations that include inserting new data, updating existing records, selecting specific information, and deleting data when necessary.
+
+| RA     | Name          | Series | Class | Address                   |
+|--------|---------------|--------|-------|---------------------------|
+| 112121 | Maria Pereira | 2      | A     | 23 Pio XII Street         |
+| 524271  | Ryan Cullen      | 3     | B     | 45 Straight Street        |
+| 321233 | Rui Barros     | 1      | B     | 32 Edson Street           |
+| 453627 | Ivo Pitanga    | 3      | A     | 34 Round Square           |
+
+> ***Note:** Table Students*
+
+They provide users, including database administrators and application developers, with the capability to maintain data accuracy, perform updates, retrieve specific information, and remove obsolete records. The flexible nature of DML commands ensures that databases can adapt to evolving needs, making them a cornerstone in ensuring the integrity and relevance of data within an information system.
+
+### Inserting Registers
+
+To add new data records to a table within a relational database, the SQL `INSERT INTO` command is employed. This command enables the explicit specification of values for each field of the record being added. Suppose we want to insert a student with the following data:
+
+<table align = "center">
+  <tr>
+    <td>123251</td>
+    <td>John Smith</td>
+    <td>3</td>
+    <td>B</td>
+    <td>Main Street, 45</td>
+  </tr>
+</table>
+
+This INSERT INTO statement adds a new student record to the "Students" table, providing specific values for each corresponding column. 
+
+```sql
+INSERT INTO TABLE Students (RA, Name, Series, Class, Address) VALUES AS (123251, 'John Smith', 3, 'B', 'Main Street, 45');
+```
+
+> ***Note:** In this example, the values are specified in the order in which the fields were defined in the table.*
+
+In cases where the user might not recall the order of the attributes, it is permissible to specify the attributes as part of the `INSERT` statement.
+
+```sql
+INSERT INTO TABLE Students (Name, RA, Series, Address, Class) VALUES AS ('John Smith', 123251, 3, 'Main Street, 45', 'B');
+```
+
+The flexibility of the `INSERT INTO` command allows for the seamless addition of diverse data into a database, providing a dynamic and adaptable mechanism for populating tables with relevant information.
+
+#
+
+### 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
