@@ -267,21 +267,21 @@ Here are some common use cases for the `ALTER TABLE` command:
 **Adding Columns**
 ```sql
 ALTER TABLE TableName
-    ADD ColumnName DataType;
+  ADD ColumnName DataType;
 ```
 > ***Note:** This query allows you to add a new column to the specified table.*
 
 **Dropping Columns**
 ```sql
 ALTER TABLE TableName
-    DROP COLUMN ColumnName;
+  DROP COLUMN ColumnName;
 ```
 > ***Note:** Use this query to remove a column from the table.*
 
 **Modifying Column Data Types**
 ```sql
 ALTER TABLE TableName
-    ALTER COLUMN ColumnName NewDataType;
+  ALTER COLUMN ColumnName NewDataType;
 ```
 
 > ***Note:** This query allows you to change the data type of an existing column.*
@@ -289,7 +289,7 @@ ALTER TABLE TableName
 **Renaming Table**
 ```sql
 ALTER TABLE TableName
-	RENAME COLUMN ColumnName to newColumnName;
+  RENAME COLUMN ColumnName to newColumnName;
 ```
 > ***Note:** This query allows you to rename a table.*
 
@@ -311,17 +311,16 @@ The CREATE INDEX statement is used to create indexes on a table. This statement 
 
 ```sql
 CREATE INDEX IndexName
-    ON TableName (Attribute1, Attribute2, ...);
+  ON TableName (Attribute1, Attribute2, ...);
 ```
 
 Example:
 
 ```sql
-CREATE INDEX idx_name
-    ON Employee (Name);
+CREATE INDEX idx_name ON Employee (Name);
 ```
 
-In this example, an index named "idx_name" is being created on the "Employee" table based on the "Name" attribute. This results in an index that speeds up the search for specific records in the table, utilizing the index associated with the "Name" column.
+In this example, an index named **idx_name** is being created on the **Employee** table based on the **Name** attribute. This results in an index that speeds up the search for specific records in the table, utilizing the index associated with the **Name** column.
 
 Indexes play a crucial role in optimizing query performance, especially in large tables, providing more efficient data retrieval. However, it's important to balance the creation of indexes, as an excessive number of indexes can impact the performance of update and insert operations.
 
@@ -363,18 +362,49 @@ It's crucial to exercise caution when removing indexes, as doing so may impact t
 
 Data Manipulation Language (DML) constitutes a critical aspect of Structured Query Language (SQL), focusing specifically on the manipulation and management of data within a relational database. DML commands empower users to interact with the data stored in tables, providing a versatile set of operations that include inserting new data, updating existing records, selecting specific information, and deleting data when necessary.
 
-| RA     | Name          | Series | Class | Address                   |
-|--------|---------------|--------|-------|---------------------------|
-| 112121 | Maria Pereira | 2      | A     | 23 Pio XII Street         |
-| 524271  | Ryan Cullen      | 3     | B     | 45 Straight Street        |
-| 321233 | Rui Barros     | 1      | B     | 32 Edson Street           |
-| 453627 | Ivo Pitanga    | 3      | A     | 34 Round Square           |
+<table align="center">
+  <tr>
+    <th>StudentID</th>
+    <th>Name</th>
+    <th>Grade</th>
+    <th>Class</th>
+    <th>Address</th>
+  </tr>
+  <tr>
+    <td>112121</td>
+    <td>Maria Pereira</td>
+    <td>2</td>
+    <td>A</td>
+    <td>23 Pio XII Street</td>
+  </tr>
+  <tr>
+    <td>524271</td>
+    <td>Ryan Cullen</td>
+    <td>3</td>
+    <td>B</td>
+    <td>45 Straight Street</td>
+  </tr>
+  <tr>
+    <td>321233</td>
+    <td>Rui Barros</td>
+    <td>1</td>
+    <td>B</td>
+    <td>32 Edson Street</td>
+  </tr>
+  <tr>
+    <td>453627</td>
+    <td>Ivo Pitanga</td>
+    <td>3</td>
+    <td>A</td>
+    <td>34 Round Square</td>
+  </tr>
+</table>
 
 > ***Note:** Table Students*
 
 They provide users, including database administrators and application developers, with the capability to maintain data accuracy, perform updates, retrieve specific information, and remove obsolete records. The flexible nature of DML commands ensures that databases can adapt to evolving needs, making them a cornerstone in ensuring the integrity and relevance of data within an information system.
 
-### Inserting Registers
+### Inserting Records
 
 To add new data records to a table within a relational database, the SQL `INSERT INTO` command is employed. This command enables the explicit specification of values for each field of the record being added. Suppose we want to insert a student with the following data:
 
@@ -388,10 +418,10 @@ To add new data records to a table within a relational database, the SQL `INSERT
   </tr>
 </table>
 
-This INSERT INTO statement adds a new student record to the "Students" table, providing specific values for each corresponding column. 
+This `INSERT INTO` statement adds a new student record to the **Students** table, providing specific values for each corresponding column. 
 
 ```sql
-INSERT INTO TABLE Students (RA, Name, Series, Class, Address) VALUES AS (123251, 'John Smith', 3, 'B', 'Main Street, 45');
+INSERT INTO TABLE Students (StudentID, Name, Series, Class, Address) VALUES (123251, 'John Smith', 3, 'B', 'Main Street, 45');
 ```
 
 > ***Note:** In this example, the values are specified in the order in which the fields were defined in the table.*
@@ -399,21 +429,74 @@ INSERT INTO TABLE Students (RA, Name, Series, Class, Address) VALUES AS (123251,
 In cases where the user might not recall the order of the attributes, it is permissible to specify the attributes as part of the `INSERT` statement.
 
 ```sql
-INSERT INTO TABLE Students (Name, RA, Series, Address, Class) VALUES AS ('John Smith', 123251, 3, 'Main Street, 45', 'B');
+INSERT INTO TABLE Students (Name, StudentID, Series, Address, Class) VALUES ('John Smith', 123251, 3, 'Main Street, 45', 'B');
 ```
 
 The flexibility of the `INSERT INTO` command allows for the seamless addition of diverse data into a database, providing a dynamic and adaptable mechanism for populating tables with relevant information.
 
 #
 
-### 
+### Removing Records
 
+The process of eliminating records from a table is carried out using the `DELETE` statement in SQL. This statement is a fundamental component of Data Manipulation Language (DML) and provides a means to selectively remove specific rows based on specified conditions. Let's delve into a more comprehensive explanation:
 
+```sql
+DELETE FROM TableName WHERE Condition;
+```
 
+> ***Note:** If no condition is specified, all records from the table will be removed.*
 
+For example, if we want to remove a student with a certain StudentID from a hypothetical **Students** table:
 
+```sql
+DELETE FROM Students
+  WHERE StudentID = 123251;
+```
 
+> ***Note:** In this scenario, the student record with the StudentID 101 will be removed.*
 
+It's crucial to exercise caution when using the `DELETE` statement, especially when a condition is not specified, as it can result in the removal of all records from the table. 
+
+Additionally, it's recommended to use conditions that precisely target the records intended for removal to avoid unintended data loss.
+
+```sql
+DELETE FROM Students;
+```
+
+> ***Note:** In this scenario, all students records will be removed.*
+
+The `DELETE` statement is a powerful tool for managing data within a relational database, allowing users to efficiently remove records that are no longer needed or that meet specific criteria.
+
+#
+
+### Record Modification
+
+To modify the value of a field for a specific record or for records that meet a particular condition, the `UPDATE` statement is employed in SQL. Let's expand on this concept using the example where the student Ryan Cullen (StudentID = 524271) will be transferred to the fourth grade.
+
+```sql
+UPDATE Students
+  SET Grade = 4
+  WHERE StudentID = 524271;
+```
+
+In this example:
+- **Field to be Updated (SET):** The "Grade" field will be updated.
+- **New Value:** 4 (indicating the fourth grade).
+- **Condition (WHERE):** The update will only be applied to the record where the StudentID is equal to 524271.
+
+Suppose now that all students from the third grade B will be transferred to the fourth grade.
+
+```sql
+UPDATE Students
+  SET Grade = 4
+  WHERE StudentID = 524271 AND Class = 'B';
+```
+
+This `UPDATE` statement ensures that the information about José da Silva in the "Students" table reflects his transfer to the fourth grade. The flexibility of the `UPDATE` statement allows for precise modifications to specific records or a set of records based on defined conditions, providing a powerful mechanism for managing and updating data within a relational database.
+
+#
+
+###
 
 
 
