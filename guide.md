@@ -750,7 +750,736 @@ The `ORDER BY` clause allows you to sort the rows of the query result in ascendi
 
 #
 
-### 
+### Join Operations
+
+SQL provides various types of join operations to combine rows from two or more tables based on related columns. The commonly used join operations include `INNER JOIN`, `LEFT JOIN`, `RIGHT JOIN`, and `FULL 
+JOIN`.
+
+For this topic, we will use the following tables to exemplify join operations:
+
+<table align = "center">
+<tr align = "center">
+    <th>Left Table (A)</th>
+    <th>Right Table (B)</th>
+    <th>Right Table (C)</th>
+    <th>Right Table (D)</th>
+    <th>Right Table (E)</th>
+</tr>
+<tr>
+<td>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>countryID</th>
+            <th>Units</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1/1/2020</td>
+            <td>1</td>
+            <td>40</td>
+        </tr>
+        <tr>
+            <td>1/2/2020</td>
+            <td>1</td>
+            <td>25</td>
+        </tr>
+        <tr>
+            <td>1/3/2020</td>
+            <td>2</td>
+            <td>30</td>
+        </tr>
+        <tr>
+            <td>1/4/2020</td>
+            <td>3</td>
+            <td>35</td>
+        </tr>
+    </tbody>
+</table>
+
+</td>
+<td >
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>China</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Brazil</td>
+        </tr>
+    </tbody>
+</table>
+</td>
+
+</td>
+<td >
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>3</td>
+            <td>Brazil</td>
+        </tr>
+    </tbody>
+</table>
+</td>
+
+</td>
+<td >
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>China</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Brazil</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Spain</td>
+        </tr>
+    </tbody>
+</table>
+</td>
+
+</td>
+<td >
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>3</td>
+            <td>Brazil</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Spain</td>
+        </tr>
+    </tbody>
+</table>
+</td>
+
+
+</tr> 
+</table>
+
+#
+
+**INNER JOIN**  
+The `INNER JOIN` operation returns rows that have matching values in both tables based on the specified condition in the ON clause.
+
+**Example:**
+```sql
+SELECT column1, column2, ...
+  FROM table1
+  INNER JOIN table2 ON table1.column = table2.column;
+```
+
+> ***Note:** This returns only the rows where there is a match between the specified columns in both tables.*
+
+Let's take a practical example for better illustration:
+
+```sql
+SELECT Date, countryID, Units, Country
+  FROM A
+  INNER JOIN E ON A.countryID = E.ID;
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>countryID</th>
+            <th>Units</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1/4/2020</td>
+            <td>3</td>
+            <td>35</td>
+            <td>Brazil</td>
+        </tr>
+    </tbody>
+</table>
+
+
+#
+
+**LEFT JOIN (or LEFT OUTER JOIN)**  
+The `LEFT JOIN` operation returns all rows from the left table and the matching rows from the right table. If there is no match, NULL values are returned for columns from the right table.
+
+**Example:**  
+```sql
+SELECT column1, column2, ...
+  FROM table1
+  LEFT JOIN table2 ON table1.column = table2.column;
+```
+> ***Note:** This ensures that all rows from the left table are included, and matching rows from the right table are added where applicable.*
+
+Let's take a practical example for better illustration:
+
+```sql
+SELECT Date, countryID, Units, Country
+  FROM A
+  LEFT JOIN B ON A.countryID = B.ID;
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>countryID</th>
+            <th>Units</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1/1/2020</td>
+            <td>1</td>
+            <td>40</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>1/2/2020</td>
+            <td>1</td>
+            <td>25</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>1/3/2020</td>
+            <td>2</td>
+            <td>30</td>
+            <td>China</td>
+        </tr>
+        <tr>
+            <td>1/4/2020</td>
+            <td>3</td>
+            <td>35</td>
+            <td>Brazil</td>
+        </tr>
+    </tbody>
+</table>
+
+#
+
+**RIGHT JOIN (or RIGHT OUTER JOIN)**  
+The `RIGHT JOIN` operation returns all rows from the right table and the matching rows from the left table. If there is no match, NULL values are returned for columns from the left table.
+
+**Example:**
+```sql
+SELECT column1, column2, ...
+  FROM table1
+  RIGHT JOIN table2 ON table1.column = table2.column;
+```
+> ***Note:** This ensures that all rows from the right table are included, and matching rows from the left table are added where applicable.*
+
+Let's take a practical example for better illustration:
+
+```sql
+SELECT Date, countryID, Units, Country
+  FROM A
+  RIGHT JOIN C ON A.countryID = C.ID;
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>countryID</th>
+            <th>Units</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1/4/2020</td>
+            <td>3</td>
+            <td>35</td>
+            <td>Brazil</td>
+        </tr>
+    </tbody>
+</table>
+
+#
+
+**FULL JOIN (or FULL OUTER JOIN)**  
+The `FULL JOIN` operation returns all rows when there is a match in either the left or right table. If there is no match, NULL values are returned for columns from the non-matching side.
+
+**Example:**  
+```sql
+SELECT column1, column2, ...
+  FROM table1
+  FULL JOIN table2 ON table1.column = table2.column;
+```
+> ***Note:** This combines the results of both tables, including matching rows and filling in NULL values for non-matching columns.*
+
+Let's take a practical example for better illustration:
+
+```sql
+SELECT Date, countryID, Units, Country
+  FROM A
+  FULL JOIN D ON A.countryID = D.ID;
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>countryID</th>
+            <th>Units</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1/1/2020</td>
+            <td>1</td>
+            <td>40</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>1/2/2020</td>
+            <td>1</td>
+            <td>25</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>1/3/2020</td>
+            <td>2</td>
+            <td>30</td>
+            <td>China</td>
+        </tr>
+        <tr>
+            <td>1/4/2020</td>
+            <td>3</td>
+            <td>35</td>
+            <td>Brazil</td>
+        </tr>
+        <tr>
+            <td>NULL</td>
+            <td>NULL</td>
+            <td>NULL</td>
+            <td>Spain</td>
+        </tr>
+    </tbody>
+</table>
+
+
+These join operations allow you to retrieve data from multiple tables based on specified conditions, enabling the creation of comprehensive result sets. Each join type serves different purposes depending on the desired outcome of the query.
+
+## Predicates
+
+
+SQL allows for queries that combine information from different tables, making it easy to retrieve specific data. 
+
+```mermaid
+erDiagram
+   
+    CLIENT { 
+        int Code PK 
+        char(30)  Name 
+        char(40)  Address 
+        char(20)  City 
+    }
+
+    ACCOUNT {
+        int Number PK 
+        int  Branch 
+        int  Client
+        int  Balance 
+    }
+
+    LOAN {
+        int Branch  PK 
+        int Number FK 
+        int  Client_Code
+        int  amount 
+    }
+
+    BRANCH {
+        int Code PK 
+        char(20)  City
+        int  Assets 
+    }
+```
+
+> ***Note:** PK (Primary Key) and FK (Foreign Key).*
+
+The following query aims to *"Present the account number(s) and the respective balance of customers who have loans":*
+
+```sql
+SELECT ACCOUNT.Number, ACCOUNT.Balance
+  FROM LOAN
+  JOIN ACCOUNT ON LOAN.Client_Code = ACCOUNT.Client;
+```
+
+> ***Note**: This query exemplifies SQL's capability to combine information from different tables, enabling more comprehensive and effective analysis.*
+
+In this query, we use the JOIN clause to combine data from the `LOAN` and `ACCOUNT` tables based on the condition `LOAN.Client_Code = ACCOUNT.Client`. The `SELECT` statement specifies the attributes we want to retrieve, namely the account number (`ACCOUNT.Number`) and the corresponding balance (`ACCOUNT.Balance`) for customers who have loans.
+
+The `relation.attribute` notation is employed to avoid ambiguities, ensuring clarity when referencing attributes present in multiple tables. In this case, we could have written `LOAN.balance` instead of `ACCOUNT.Balance` in the `SELECT` clause, but we chose to use the balance from the `ACCOUNT` table, where the relationship is established.
+
+By explicitly denoting the relation along with the attribute, SQL guarantees precise interpretation and execution of the query. This becomes especially crucial when dealing with complex database structures where attribute names may overlap across different tables. In such cases, the `relation.attribute` notation becomes instrumental in providing a clear and unequivocal reference to the intended attribute, contributing to the overall accuracy and reliability of SQL queries.
+
+SQL uses the `relation.attribute` notation to avoid ambiguities, ensuring clarity in cases where an attribute is present in the schema of multiple relations. In the example presented, we could have written `ACCOUNT.Balance` instead of simply `Balance` in the SELECT clause. However, since the attribute `Balance` is present in only one of the relations referenced in the FROM clause (specifically, the `ACCOUNT` table), there is no ambiguity when using just `Balance`.
+
+To illustrate, we consider a new query that seeks information about customers with accounts having a balance exceeding 50,000:
+
+```sql
+SELECT CLIENT.Name, ACCOUNT.Balance
+  FROM CLIENT
+  JOIN ACCOUNT ON CLIENT.Code = ACCOUNT.Number
+  WHERE ACCOUNT.Balance > 50000;
+```
+
+In this query: 
+- We use `JOIN` to connect the `cliente` and `conta` tables based on corresponding key relationships.
+- The `SELECT` clause specifies which attributes we want to retrieve, using the `relation.attribute` notation for clarity.
+- The `WHERE` clause includes a condition that uses the comparison operator `>` to filter accounts with balances above 50,000.
+
+#
+
+The query *"Present the name and city of customers with a loan at the New York Branch"* can be expressed as follows:
+
+```sql
+SELECT CLIENT.Name, CLIENT.City
+  FROM LOAN
+  JOIN CLIENT ON LOAN.Client_Code = CLIENT.Code
+  WHERE LOAN.Branch = 'New York';
+```
+
+The SQL language allows the use of logical connectors such as `AND`, `OR`, and `NOT`. Additionally, it supports arithmetic expressions with operators like +, -, *, and /.
+
+A SQL also includes a comparison operator, `BETWEEN`, to simplify WHERE clauses specifying that a value should be between a certain range. If we want to find the account numbers with a balance between 90,000 and 100,000, we can use the `BETWEEN` clause:
+
+```sql
+SELECT Number
+  FROM ACCOUNT
+  WHERE Balance BETWEEN 90000 AND 100000;
+```
+
+This is equivalent to the following alternative:
+
+```sql
+SELECT Number
+  FROM ACCOUNT
+  WHERE Balance >= 90000 AND Balance <= 100000;
+```
+
+Similarly, you can use the `NOT BETWEEN` comparison operator to find records outside a specified range.
+
+#
+
+A SQL includes a string substitution operator for string comparisons. Patterns are described using two special characters:
+
+- `%` (percent) Replaces any substring.
+- `_` (underscore) Replaces any single character.
+
+Patterns are case-sensitive; that is, uppercase characters do not replace lowercase characters, and vice versa. To illustrate pattern substitution, consider the following examples:
+
+- `'Jose%'` replaces any string starting with "Jose".
+- `'%ari%'` replaces any string containing "ari" as a substring, for example, "Maria", "Mariana", "Itaparica".
+- `___` replaces any string with exactly three characters.
+- `___%` replaces any string with at least three characters.
+
+  #
+
+Patterns are expressed in SQL using the comparison operator `LIKE`. 
+
+Consider the query: *"Present the names of all customers whose streets contain the substring 'Lima'."*
+
+```sql
+SELECT Name
+  FROM CLIENT
+  WHERE Adress LIKE '%Lima%';
+```
+
+To allow patterns to include the special characters `%` and `_`, the SQL language permits the specification of an escape character, represented by a user-defined character, for example, "\" (backslash). 
+
+This way, the character after "\" is interpreted as a literal, not as a special character. For example:
+
+- `LIKE 'ab\%cd%' ESCAPE '\'` represents strings starting with "ab%cd."
+- `LIKE 'ab\\%cd%' ESCAPE '\'` represents strings starting with "ab\cd."
+
+SQL also allows searching for non-substitution instead of substitution using the `NOT LIKE` comparison operator.
+
+#
+
+### Membership
+
+The IN operator tests the membership of a set of values produced by a `SELECT` statement. Conversely, the `NOT IN` operator tests the absence of members from a set.
+
+To present clients who have both an account and a loan at agency 38, we begin by identifying all account holders at agency 38:
+
+```sql
+SELECT Client
+  FROM ACCOUNT
+  WHERE Branch = 38;
+```
+
+Then, to find clients who are loan applicants at agency 38 and appear in the list of account holders at agency 38, we incorporate the above subquery into another SELECT:
+
+```sql
+SELECT Client
+  FROM LOAN
+  WHERE Branch = 38
+    AND CLIENT IN (SELECT Client FROM ACCOUNT WHERE Branch = 38);
+```
+
+It's possible to write the same query in different ways in SQL, which is beneficial as it allows the user to think about the query in the way that seems most natural to them.
+
+```sql
+SELECT Client
+  FROM LOAN
+  WHERE Branch = 38
+    AND (Branch, Client) IN (SELECT Branch, Client FROM ACCOUNT);
+```
+
+Now, we illustrate the use of the `NOT` operator in a construction to present all clients who have an account at agency 38 but do `NOT` have a loan at that same agency:
+
+```sql
+SELECT Client
+  FROM ACCOUNT
+  WHERE Branch = 38
+    AND Client NOT IN (SELECT Client_Code FROM LOAN WHERE Branch = 38);
+```
+
+#
+
+### Tuple Variables
+
+Tuple variables in the SQL language need to be associated with a specific relation and are defined in the FROM clause. These variables are useful for comparing tuples within the same relation.
+
+To illustrate, consider the following query:
+
+```sql
+-- Display the name and city of customers who have a loan
+
+SELECT C.name, C.city
+  FROM loan L, customer C
+  WHERE L.customer = C.code;
+```
+
+In this query, `L` and `C` are tuple variables associated with the relations `loan` and `customer`, respectively. The variable `C` is defined in the FROM clause after the name of the relation it is associated with.
+
+Tuple variables defined in a query are valid in subqueries of lower levels but are not visible to higher-level subqueries. If a tuple variable is defined locally in a subquery and globally in a query, the local definition takes precedence.
+
+Tuple variables are particularly useful for comparing two tuples in the same relation. For example:
+
+```sql
+-- Which customers have an account at any branch where the customer with code 12345 has an account
+
+SELECT DISTINCT C.customer
+  FROM account C, account T
+  WHERE C.customer = 12345
+    AND C.branch = T.branch;
+```
+
+Note that we cannot use the notation `accounts.branch` in this case, as it would not be clear which reference to `accounts` is desired.
+
+## Set Comparison 
+
+Comparison operations in the SQL language involve various set operations such as `UNION`, `INTERSECT`, and `EXCEPT` (or `MINUS` in some implementations). These operations are essential for combining, finding the intersection, or determining the difference between result sets of different queries.
+
+#
+
+**UNION**
+
+The `UNION` operation in SQL is a powerful tool that enables the combination of results from two or more queries into a single result set. This operation is particularly useful when dealing with similar structures across different datasets, allowing you to create a consolidated view. 
+
+The key features of the `UNION` operation include the merging of results and automatic elimination of duplicate entries.
+
+**Key Characteristics:**
+
+**Combining Results:**
+- The primary purpose of the `UNION` operation is to merge the results of multiple queries.
+- It allows you to bring together data from different tables or sources, creating a unified dataset.
+
+**Single Result Set:**
+- The final output of the `UNION` operation is a single result set that includes all distinct rows from the combined queries.
+
+**Automatic Duplicate Elimination:**
+- One significant advantage of using `UNION` is its ability to automatically eliminate duplicate entries from the result set.
+- This ensures that each unique record appears only once in the final output.
+
+**Example: Combining Clients from Loans and Accounts:**
+
+Consider the following SQL query that utilizes the `UNION` operation to select all clients from the `loan` and `account` tables:
+
+```sql
+-- Selects all clients from loans and accounts
+
+SELECT client FROM loan
+  UNION
+  SELECT client FROM account;
+```
+
+> ***Note:** The resulting output is a consolidated list of clients from both tables, ensuring uniqueness.*
+
+The `UNION` operation is a valuable tool in SQL for merging and consolidating data, providing a streamlined approach to handle diverse datasets. It is widely used in scenarios where data integration and a unified view are essential.
+
+#
+
+**INTERSECT**  
+The `INTERSECT` operation in SQL is designed to retrieve records that are common to two or more queries. This operation facilitates the identification of shared elements between datasets, allowing for a more focused analysis. 
+
+The primary features of the `INTERSECT` operation include the extraction of common records and the automatic elimination of duplicate entries.
+
+**Key Characteristics:**
+
+**Common Record Retrieval:**
+- The primary purpose of the `INTERSECT` operation is to identify and retrieve records that exist in the results of multiple queries.
+- It focuses on extracting data points that are present in all specified queries.
+
+**Single Result Set:**
+- Similar to the `UNION` operation, the `INTERSECT` operation produces a single result set containing only the records common to all involved queries.
+
+**Automatic Duplicate Elimination:**
+- One of the advantages of using `INTERSECT` is its ability to automatically eliminate duplicate entries from the result set.
+- This ensures that each unique record appears only once in the final output.
+
+**Example: Identifying Clients with Both Loans and Accounts:**
+
+Consider the following SQL query that utilizes the `INTERSECT` operation to select clients who have both loans and accounts:
+
+```sql
+-- Selects clients who have both loans and accounts
+
+SELECT client FROM loan
+  INTERSECT
+  SELECT client FROM account;
+```
+
+In summary, the `INTERSECT` operation is a valuable SQL tool for identifying and extracting common records from multiple queries. It contributes to a more focused and precise data analysis by emphasizing shared elements between datasets.
+
+#
+
+**EXCEPT (or MINUS in some implementations):**  
+
+The `EXCEPT` operation in SQL is employed to retrieve records from the first query that are not present in subsequent queries. It helps in identifying elements unique to the initial dataset by excluding those found in subsequent datasets. 
+
+The `EXCEPT` operation can be used to compare and contrast different datasets, highlighting distinctions in the data. It provides flexibility in terms of including or excluding duplicate entries based on the specific implementation.
+
+**Key Characteristics:**
+
+**Exclusive Record Retrieval:**
+- The primary function of the `EXCEPT` operation is to return records that are exclusive to the first query, excluding those found in the subsequent queries.
+- It focuses on isolating elements unique to the initial dataset.
+
+**Single Result Set:**
+- Similar to the `UNION` and `INTERSECT` operations, the `EXCEPT` operation produces a single result set containing the records exclusive to the first query.
+
+**Handling Duplicates:**
+- The behavior regarding duplicates in the result set may vary depending on the specific implementation of SQL.
+- Some implementations automatically eliminate duplicates, while others may include them in the output.
+
+**Example: Identifying Clients with Accounts but Not Loans:**
+
+Consider the following SQL query that utilizes the `EXCEPT` operation to select clients who have accounts but not loans:
+
+```sql
+-- Selects clients who have accounts but not loans
+
+SELECT client FROM account
+  EXCEPT
+  SELECT client FROM loan;
+```
+
+The `EXCEPT` operation in SQL is a versatile tool for identifying exclusive records in the first query when compared to subsequent queries. It plays a crucial role in data comparison and analysis by highlighting distinctions and providing insights into unique elements within datasets.
+
+These set operations are valuable when performing comparisons or combining data sets from different SQL queries.
+
+
+#
+
+### Testing Empty Relations
+
+SQL provides the `EXISTS` and `NOT EXISTS` constructions to assess the presence or absence of tuples in subqueries. These constructions return `true` if the result of the subquery is not empty and are valuable for conditional queries.
+
+**Example: Clients with Both Account and Loan at Agency 17:**
+```sql
+SELECT name
+FROM client
+WHERE EXISTS (
+    SELECT *
+    FROM account
+    WHERE account.client = client.code
+    AND agency = 17
+)
+AND EXISTS (
+    SELECT *
+    FROM loan
+    WHERE loan.client = client.code
+    AND agency = 17
+);
+```
+
+In this query:
+- The outermost `SELECT` statement retrieves the names of clients who meet the specified conditions.
+- The first `EXISTS` subquery, nested within the `WHERE` clause, checks for the existence of any records in the `account` table where the client code matches the client's code from the outer query, and the agency is 17. This ensures that the client has an account at the Ipiranga agency.
+- The second `EXISTS` subquery performs a similar check but focuses on the `loan` table, verifying whether the client has a loan at the Ipiranga agency.
+
+The use of `EXISTS` is particularly relevant in this scenario. It returns `true` if the specified subquery returns any rows, indicating that there is a match. Consequently, the combined conditions of both `EXISTS` subqueries ensure that only clients with both an account and a loan at agency 17 are included in the final result.
+
+This type of query is valuable in scenarios where you want to find clients who have multiple related records in different tables, allowing for a comprehensive analysis of client interactions with the specified agency. It's essential to ensure that the column names and data types align between the subqueries and the main query for accurate execution. Additionally, be mindful of potential performance considerations, as subqueries can impact query execution time.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
