@@ -375,28 +375,28 @@ Data Manipulation Language (DML) constitutes a critical aspect of Structured Que
     <td>Maria Pereira</td>
     <td>2</td>
     <td>A</td>
-    <td>23 Pio XII Street</td>
+    <td>Pio XII Street</td>
   </tr>
   <tr>
     <td>524271</td>
     <td>Ryan Cullen</td>
     <td>3</td>
     <td>B</td>
-    <td>45 Straight Street</td>
+    <td>Straight Street</td>
   </tr>
   <tr>
     <td>321233</td>
     <td>Rui Barros</td>
     <td>1</td>
     <td>B</td>
-    <td>32 Edson Street</td>
+    <td>Edson Street</td>
   </tr>
   <tr>
     <td>453627</td>
     <td>Ivo Pitanga</td>
     <td>3</td>
     <td>A</td>
-    <td>34 Round Square</td>
+    <td>Round Square</td>
   </tr>
 </table>
 
@@ -414,14 +414,14 @@ To add new data records to a table within a relational database, the SQL `INSERT
     <td>John Smith</td>
     <td>3</td>
     <td>B</td>
-    <td>Main Street, 45</td>
+    <td>Main Street</td>
   </tr>
 </table>
 
 This `INSERT INTO` statement adds a new student record to the **Students** table, providing specific values for each corresponding column. 
 
 ```sql
-INSERT INTO TABLE Students (StudentID, Name, Series, Class, Address) VALUES (123251, 'John Smith', 3, 'B', 'Main Street, 45');
+INSERT INTO TABLE Students (StudentID, Name, Series, Class, Address) VALUES (123251, 'John Smith', 3, 'B', 'Main Street');
 ```
 
 > ***Note:** In this example, the values are specified in the order in which the fields were defined in the table.*
@@ -429,7 +429,7 @@ INSERT INTO TABLE Students (StudentID, Name, Series, Class, Address) VALUES (123
 In cases where the user might not recall the order of the attributes, it is permissible to specify the attributes as part of the `INSERT` statement.
 
 ```sql
-INSERT INTO TABLE Students (Name, StudentID, Series, Address, Class) VALUES ('John Smith', 123251, 3, 'Main Street, 45', 'B');
+INSERT INTO TABLE Students (Name, StudentID, Series, Address, Class) VALUES ('John Smith', 123251, 3, 'Main Street', 'B');
 ```
 
 The flexibility of the `INSERT INTO` command allows for the seamless addition of diverse data into a database, providing a dynamic and adaptable mechanism for populating tables with relevant information.
@@ -469,7 +469,7 @@ The `DELETE` statement is a powerful tool for managing data within a relational 
 
 #
 
-### Record Modification
+### Modifying Records
 
 To modify the value of a field for a specific record or for records that meet a particular condition, the `UPDATE` statement is employed in SQL. Let's expand on this concept using the example where the student Ryan Cullen (StudentID = 524271) will be transferred to the fourth grade.
 
@@ -496,22 +496,261 @@ This `UPDATE` statement ensures that the information about José da Silva in the
 
 #
 
-###
+### Querying Datas
+
+When querying data in a database using the Data Manipulation Language (DML), the primary command is the `SELECT-FROM-WHERE` statement. This compound SQL statement allows users to retrieve specific information from one or more tables based on specified conditions. 
+
+<table align = "center">
+<tr align = "center">
+    <th>Students</th>
+    <th>Grades</th>
+</tr>
+<tr>
+<td>
+  
+<table>
+    <thead>
+        <tr>
+            <th>StudentID</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Age</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1</td>
+            <td>John</td>
+            <td>Doe</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Jane</td>
+            <td>Smith</td>
+            <td>22</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Robert</td>
+            <td>Johnson</td>
+            <td>21</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Emily</td>
+            <td>Williams</td>
+            <td>23</td>
+        </tr>
+    </tbody>
+</table>
 
 
 
+</td>
+
+<td >
+
+<table>
+    <thead>
+        <tr>
+            <th>GradeID</th>
+            <th>StudentID</th>
+            <th>Exam</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody align = "center">
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>Midterm</td>
+            <td>68</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>2</td>
+            <td>Midterm</td>
+            <td>85</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>3</td>
+            <td>Midterm</td>
+            <td>92</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>4</td>
+            <td>Midterm</td>
+            <td>78</td>
+        </tr>
+    </tbody>
+</table>
+
+</td>
+</tr> 
+</table>
+
+**SELECT Clause**  
+The `SELECT` clause corresponds to the projection operation in relational algebra. It determines the columns or fields that will be included in the result set of the query. Users can select specific columns or apply aggregate functions to derive calculated values.
+
+**Example:**  
+```sql
+SELECT FirstName, LastName, Age
+```
+
+> ***Note:** This query through the SELECT clause, is selecting the FirstName, LastName, and Age attributes from a table.*
+
+**FROM Clause**  
+The `FROM` clause specifies the tables involved in the query and establishes the relationships between them. It corresponds to the Cartesian product in relational algebra. Tables are joined based on common columns to create a combined dataset for the query.
+
+**Example:**  
+```sql
+FROM Students
+    JOIN Grades ON Students.StudentID = Grades.StudentID
+```
+
+> ***Note:** The JOIN clause is connecting the Students table with the Grades table based on the common StudentID attribute.*
+
+**WHERE Clause**  
+The `WHERE` clause corresponds to the selection operation in relational algebra. It introduces conditions that filter the rows from the result set. Only rows that satisfy the specified conditions are included in the final output.
+
+**Example:**  
+```sql
+WHERE Grades.Exam = 'Midterm' AND Grades.Score > 70
+```
+
+> ***Note:** The WHERE clause filters the results by Grades table where the Exam is Midterm and the Score is greater than 70.*
+
+Combining these clauses, a comprehensive `SELECT-FROM-WHERE` statement might look like the following:
 
 
 
+```sql
+SELECT FirstName, LastName, Age
+    FROM Students
+    JOIN Grades ON Students.StudentID = Grades.StudentID
+    WHERE Grades.Exam = 'Midterm' AND Grades.Score > 70;
+```
+
+> ***Note:** This is an example of a typical use of queries.*
+
+<table align = "center">
+    <tbody>
+        <tr>
+            <td>Jane</td>
+            <td>Smith</td>
+            <td>22</td>
+        </tr>
+        <tr>
+            <td>Robert</td>
+            <td>Johnson</td>
+            <td>21</td>
+        </tr>
+        <tr>
+            <td>Emily</td>
+            <td>Williams</td>
+            <td>23</td>
+        </tr>
+    </tbody>
+</table>
+
+In this example, the query retrieves the *first name*, *last name*, and *age* of students who scored **above 70** on the midterm exam, utilizing the **Students** and **Grades** tables and joining them based on the common **StudentID**. The `SELECT-FROM-WHERE` statement provides a powerful mechanism for extracting targeted information from a database, supporting a wide range of data analysis and reporting needs.
+
+The condition (or predicate) that follows the `WHERE` clause can contain comparison operators such as:
+
+- `=` (Equal)
+- `>` (Greater than)
+- `<` (Less than)
+- `<>` (Not equal)
+- `>=` (Greater than or equal to)
+- `<=` (Less than or equal to)
 
 
+Additionally, boolean operators can be used to combine multiple conditions:
 
+- `AND`: Returns true if both conditions are true.
+- `OR`: Returns true if at least one of the conditions is true.
+- `NOT`: Negates the result of a condition.
 
+These operators allow for the formulation of complex conditions that help filter and retrieve specific subsets of data from the database based on various criteria. Here's an example:
 
+```sql
+SELECT FirstName, LastName, Age
+    FROM Students
+    WHERE Grade = 'A' AND Age >= 18;
+```
 
+In this example, the query selects the first name, last name, and age of students who have received an $A$ grade and are 18 years old or older. The use of comparison and boolean operators in the `WHERE` clause enables the creation of precise conditions for data retrieval.
 
+The `WHERE` clause can be omitted, and the list of attributes ($A1, A2, ...$) can be replaced by an asterisk ($*$) to select all fields from all tables listed in the `FROM` clause. This approach is useful when you want to retrieve all data from one or more tables without applying specific conditions. Here's an example:
 
+```sql
+SELECT *
+    FROM Students;
+```
 
+#
+
+### Eliminating Duplicate Results
+
+In formal query languages, the foundation is grounded in mathematical concepts, particularly those related to relations. These languages, such as SQL (Structured Query Language), adhere to principles where duplicate records are not expected to be present in query results. However, the SQL language, while formal and powerful, does not inherently eliminate duplicate records from query results by default. 
+
+The presence of duplicate records in query results might occur due to various reasons, such as complex joins, or when querying data from multiple tables. To address this and retrieve a distinct set of records, the `DISTINCT` keyword comes into play.
+
+```sql
+SELECT DISTINCT column1, column2, ...
+    FROM TableName
+    WHERE conditions;
+```
+
+> ***Note:** The DISTINCT keyword ensures that only unique combinations of the specified columns are included in the result set.*
+
+By incorporating the `DISTINCT` keyword after the `SELECT` clause in an SQL query, users can instruct the database to filter out duplicate records, providing a unique set of results. 
+
+A SQL allows the use of the word `ALL` to explicitly specify that we do not want duplicates to be removed.
+
+```sql
+SELECT ALL Attribute FROM TableName
+```
+
+Since duplicating the resulting records is the default behavior, the use of the `ALL` clause becomes optional.
+
+#
+
+### Sorting the Result of a Query
+
+In SQL, the `ORDER BY` clause is a powerful tool that allows you to control the order in which the results of a query are presented. This clause is particularly useful when you want to organize the output in a specific sequence based on one or more columns.
+
+Here's a breakdown of how the `ORDER BY` clause is used:
+
+```sql
+SELECT column1, column2, ...
+    FROM TableName
+    WHERE conditions
+    ORDER BY column1 [ASC | DESC], column2 [ASC | DESC], ...;
+```
+
+> **Note:** ASC (Ascending) is the default, but you can use DESC (Descending) for reverse order.*
+
+Example:
+
+```sql
+SELECT FirstName, LastName, Age
+    FROM Students
+    ORDER BY Age DESC, LastName ASC;
+```
+
+In this example:
+- The query selects the first name, last name, and age from the **Students** table.
+- The result set is ordered first by age in *descending order* (oldest to youngest), and then by last name in *ascending order* (alphabetically).
+
+The `ORDER BY` clause allows you to sort the rows of the query result in ascending or descending order. When used, the `ORDER BY` clause should always appear in the last line of the query.
+
+#
+
+### 
 
 
 
