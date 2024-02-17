@@ -104,7 +104,7 @@ CREATE TABLE Employees
     EmployeeID int NOT NULL,
     Name varchar(50),
     Age int,
-  PRIMARY KEY(registration)
+    PRIMARY KEY(registration)
 );
 ```
 
@@ -1246,7 +1246,7 @@ SQL also allows searching for non-substitution instead of substitution using the
 
 ### Membership
 
-The IN operator tests the membership of a set of values produced by a `SELECT` statement. Conversely, the `NOT IN` operator tests the absence of members from a set.
+The `IN` operator tests the membership of a set of values produced by a `SELECT` statement. Conversely, the `NOT IN` operator tests the absence of members from a set.
 
 To present clients who have both an account and a loan at agency 38, we begin by identifying all account holders at agency 38:
 
@@ -1462,12 +1462,397 @@ The use of `EXISTS` is particularly relevant in this scenario. It returns `true`
 
 This type of query is valuable in scenarios where you want to find clients who have multiple related records in different tables, allowing for a comprehensive analysis of client interactions with the specified agency. It's essential to ensure that the column names and data types align between the subqueries and the main query for accurate execution. Additionally, be mindful of potential performance considerations, as subqueries can impact query execution time.
 
+## Aggregate Functions
+
+SQL provides the ability to perform calculations on groups of records using the `GROUP BY` clause. The attribute or attributes used in the `GROUP BY` clause are used to form groups. Records with the same value in all the attributes in the `GROUP BY` clause are placed in a group. SQL includes functions for computing:
+
+The SQL language has specific functions for calculations on groups of tuples:
+- Average: `AVG`
+- Minimum: `MIN`
+- Maximum: `MAX`
+- Total: `SUM`
+- Count: `COUNT`
+
+#
+
+Operations like `AVG` are called aggregate functions because they operate on aggregations of tuples. The result of an aggregate function is a single value.
+
+To illustrate, consider the query: *"Present the average balance of accounts in each agency"*
+
+```sql
+SELECT agency_name, AVG(balance)
+  FROM accounts
+  GROUP BY agency
+```
+
+Duplicate retention is crucial in computing the average. Suppose the account balances at the Ipiranga agency are $1,000, 2,000, 3,000,$ and $1,000.$ The average balance is $7,000/4 = 1,666.67$. If duplicates were eliminated, we would get an incorrect answer $(6,000/3 = 2,000)$.
+
+The `GROUP BY` clause conceptually rearranges the specified table after the `FROM` clause into partitions or groups, such that within any of the groups, all rows have the same value for the attribute specified in the `GROUP BY`.
+
+There are cases where duplicates need to be eliminated before an aggregate function is computed. If we want to eliminate duplicates, we use the `DISTINCT` keyword in the aggregate expression.
+"Find the number of account holders for each agency"
+In this case, an account holder is counted only once, regardless of the number of accounts they may have.
+```sql
+SELECT agency_name, COUNT(DISTINCT client_name)
+FROM accounts
+GROUP BY agency
+```
+
+Sometimes it is useful to define a condition that applies to groups rather than individual records. For example, we might be interested only in agencies where the average balances are higher than $1,200$. This condition does not apply to individual records but to each group formed by the `GROUP BY` clause. To express such a query, we use the `HAVING` clause. Predicates in the `HAVING` clause are applied after the formation of groups, allowing aggregate functions to be used.
+```sql
+SELECT agency_name, AVG(balance)
+FROM accounts
+GROUP BY agency
+HAVING AVG(balance) > 1200
+```
+
+#
+
+Aggregate functions cannot be composed in SQL. This means that any attempt to use `MAX(AVG(...))` will not be allowed. On the other hand, our strategy is to find those branches for which the average balance is greater than or equal to all average balances.
+
+**Example:** Present the names of agencies with the highest average balances.
+  
+```sql
+SELECT agency_name
+  FROM accounts
+  GROUP BY agency
+  HAVING AVG(balance) >= ALL (SELECT AVG(balance)  FROM accounts GROUP BY agency);
+```
+
+Sometimes, we wish to treat the entire relation as a single group. In such cases, we do not use the `GROUP BY` clause.
+
+**Example:** Present the average balances
+
+```sql
+SELECT AVG(balance)
+  FROM accounts;
+```
+
+The aggregate function `COUNT` is frequently used to count the number of tuples in a relation. The notation for this is `COUNT(*)`. To find the number of tuples in the client relation, we write:
+
+```sql
+SELECT COUNT(*)
+  FROM clients;
+```
+
+If a `WHERE` clause and a `HAVING` clause appear in the same query, the predicate in the `WHERE` clause is applied first. The tuples that satisfy the `WHERE` predicate are then grouped by a `GROUP BY` clause. 
+
+The `HAVING` clause is then applied to each group. Groups that satisfy the predicate of the `HAVING` clause are used by the `SELECT` clause to generate tuples in the query result. If there is no `HAVING` clause, the entire set of tuples that satisfy the `WHERE` clause is treated as a single group.
+
+**Example:** Present the average balances of account holders who live in São Paulo and have at least three accounts.
+
+```sql
+SELECT AVG(balance)
+  FROM accounts, clients
+  WHERE accounts.client_name = clients.client_name
+  AND city = 'Sao Paulo'
+  GROUP BY accounts.client_name
+  HAVING COUNT(DISTINCT account_number) >= 3;
+```
+
+The ANSI version of SQL requires that `COUNT` be used only as `COUNT(*)` or `COUNT(DISTINCT ...)`. It is valid to use `DISTINCT` with `MAX` and `MIN` even if the result does not change. The keyword `ALL` can be used instead of `DISTINCT` to allow duplications, but since `ALL` is the default, there is no need to use it.
+
+SQL includes the operations of the fundamental relational algebra. The Cartesian product is represented by the `FROM` clause. Projection is performed in the `SELECT` clause. The selection predicates of relational algebra are represented in the `WHERE` clause. Relational algebra and SQL include union and difference. SQL allows intermediate results to be stored in temporary relations. Thus, we can encode any expression from relational algebra in SQL.
+
+SQL offers a rich collection of features, covering aggregate functions, tuple sorting, and other capabilities not included in formal query languages. Therefore, SQL is more powerful than relational algebra.
+Many versions of SQL allow SQL queries to be submitted from a program written in a general-purpose language such as Pascal, PL/I, Fortran, C, or Cobol. This form of SQL further extends the programmer's ability to manipulate the database.
+
+
+## Views
+
+A view is a virtual table whose content is defined by a query to the database. The view is not a physical table but a set of instructions that returns a dataset. A view can be composed of some columns from a single table or columns from multiple tables.
+
+The use of views is particularly useful when you want to focus on a specific type of information maintained by the database. Consider a corporate database accessed by users from various departments. The information handled by the sales team is certainly different from that of the billing department. Through views, it is possible to offer users only the information they need, whether it comes from one or multiple tables in the database.
+
+Views allow different users to see the same information from a different perspective. They enable information to be combined to meet a specific user's needs and can even be exported to other applications.
+
+One of the greatest advantages of creating a view is to simplify queries for users who only use specific information, thereby reducing the size and complexity of `SELECT` commands. Another advantage of 
+using views is related to security, as it prevents users from accessing data from a table that may be confidential.
+
+#
+
+A view is defined in SQL using the `CREATE VIEW` command. To define a view, we need to give the view a name and define the query that processes it. The syntax for the `CREATE VIEW` command is:
+
+```sql
+CREATE VIEW v AS
+  <query expression>
+```
+
+> ***Note:** The <query expression> is any valid query expression, and the name of the view is defined by "v".*
+
+Using the view `all_clients`, we can find all clients from the Ipiranga agency:
+
+```sql
+CREATE VIEW all_clients AS
+  (SELECT agency_name, client_name
+   FROM accounts)
+  UNION
+  (SELECT agency_name, client_name
+   FROM loans);
+```
+
+> ***Note:** View names appear wherever a relation name can appear.*
+
+Since SQL allows a view name to appear anywhere a relation name appears, we can write queries or statements involving the view name in a manner similar to how we would reference a table name in the same context.
+
+```sql
+SELECT client_name
+  FROM all_clients
+  WHERE agency_name = 'Ipiranga';
+```
+
+#
+
+The SQL code below creates a view named `loans_info` that selects specific columns (`agency_name`, `loan_number`, and `client_name`) from the `loans` table. 
+
+This view acts as a virtual table representing a subset of data from the underlying `loans` relation.
+
+```sql
+-- Creating a view named loans_info that includes specific columns from the loans table
+
+CREATE VIEW loans_info AS
+  SELECT agency_name, loan_number, client_name
+  FROM loans;
+
+-- Inserting a new record into the loans_info view
+-- Note: The actual insertion occurs in the underlying loans relation, as loans_info is just a virtual representation.
+
+INSERT INTO loans_info
+  VALUES ('Ipiranga', 17, 'Paulo Farias');
+```
+
+The `INSERT INTO loans_info` statement attempts to insert a new record into the `loans_info` view. However, it's important to understand that a view is a virtual representation and doesn't store data on its own. The actual insertion occurs in the underlying `loans` relation, and the view serves as a convenient way to interact with a specific subset of that data.
+
+The note in the comments emphasizes that even though the insertion is written as if it's into the `loans_info` view, it effectively inserts the tuple into the `loans` relation. Additionally, it mentions that a value for the `amount` column is not provided in the `INSERT` statement, resulting in a NULL value for that column in the underlying `loans` relation.
+
+## Permissions
+
+An important task that must be performed by the database administrator is the creation of user accounts. Anyone who wishes to access a database needs to be previously registered as a user of the database and have privileges established for them regarding the tasks that can be executed in the database.
+
+Controlling access to the database is one of the main tasks of an administrator. To achieve this control, databases have a mechanism that allows the registration of a user. Each registered user receives an access password that needs to be provided in various situations.
+
+### Privileges
+
+A privilege is an authorization for the user to access and manipulate a database object in a certain way. For example, a user may have the privilege to select tables but cannot modify them. Another user may both read and alter the data or even the structure of tables and other objects.
+
+There are two types of privileges: system privileges and object privileges. A system privilege is the right or permission to perform an action on a specific type of database object. The object privilege is the right to perform a specific action on a specific object, such as the right to insert a record into a particular table. Object privileges do not apply to all database objects.
+
+When a user creates an object like a table, it can only be viewed by the user who created it. For another user to have access to it, the owner of the table needs to grant privileges to the user who will access the table.
+
+#
+
+### Assigning Privileges
+
+The `GRANT` command allows assigning privileges to a user (or group of users). The privileges can be `SELECT`, `INSERT`, `UPDATE`, `DELETE`, or `ALL PRIVILEGES`. The objects for which privileges are generally granted are tables and views.
+
+```sql
+GRANT privilege/ALL PRIVILEGES
+  ON object
+  TO user1, user2,... /PUBLIC
+  [WITH GRANT OPTION]
+```
+
+- `privilege`: Name of the privilege (e.g., SELECT, INSERT).
+- `ALL PRIVILEGES`: Grants all available privileges.
+- `object`: Generally a table or view.
+- `user`: A specific user.
+- `PUBLIC`: All users.
+- `WITH GRANT OPTION`: Optional parameter that allows the user receiving the privilege to grant it to other users.
+
+#
+
+### Revoking a Privilege
+
+Just as you granted a privilege, you can also revoke it. The SQL command responsible for this task is the `REVOKE` command.
+
+```sql
+REVOKE [GRANT OPTION FOR] privilege
+  ON object
+  FROM user1, user2,... /PUBLIC
+```
+
+- `GRANT OPTION FOR`: Optional parameter that removes the permission to pass on the privilege.
+- `privilege`: Name of the privilege (e.g., SELECT, INSERT).
+- `object`: Generally a table or view.
+- `user`: A specific user.
+- `PUBLIC`: All users.
+
+
+## Database Administration
+
+Database administration plays a pivotal role in ensuring the seamless operation of a robust and efficient database system. It encompasses a spectrum of responsibilities, ranging from routine tasks to the implementation of advanced functionalities that significantly contribute to improved performance, heightened security, and overall operational efficiency.
+
+### Stored Procedures
+
+Stored procedures are essential components of a relational database system, providing a structured and efficient means of executing a sequence of SQL statements. They serve as encapsulated routines that can be invoked by applications or other procedures. Let's further explore the significance and capabilities of stored procedures, using the extended example:
+
+```sql
+-- Create Stored Procedure
+CREATE PROCEDURE sp_update_salary
+    @percentage_increase DECIMAL(5,2)
+AS
+BEGIN
+    -- Validate the provided percentage increase
+    IF @percentage_increase > 0 AND @percentage_increase <= 100
+    BEGIN
+        -- Apply the percentage increase to employee salaries
+        UPDATE employees
+        SET salary = salary * (1 + @percentage_increase / 100);
+        
+        -- Log the salary update for auditing purposes
+        INSERT INTO salary_log (employee_id, old_salary, new_salary, updated_at)
+        SELECT employee_id, salary, salary * (1 + @percentage_increase / 100), GETDATE()
+        FROM employees;
+        
+        -- Provide success message
+        PRINT 'Salaries updated successfully.';
+    END
+    ELSE
+    BEGIN
+        -- Raise an error for an invalid percentage
+        RAISEERROR('Invalid percentage increase. Please provide a percentage between 0 and 100.', 16, 1);
+    END
+END;
+```
+
+> ***Note:** Stored procedures are precompiled sets of one or more SQL statements that can be executed as a single unit.*
+
+#
+
+**Enhancements**
+1. **Extended Validation:** The stored procedure now validates not only that the percentage increase is greater than zero but also ensures it does not exceed 100%, providing a more comprehensive validation.
+  
+2. **Audit Logging:** An additional feature is introduced to log the salary updates into a separate table (`salary_log`), capturing relevant information for auditing purposes. This enhances data traceability and meets compliance requirements.
+
+3. **Informative Message:** The procedure includes a PRINT statement to provide a clear success message after updating the salaries, enhancing communication and user experience.
+
+Stored procedures, as exemplified here, go beyond basic CRUD operations. They encapsulate sophisticated business logic, support transaction management, and contribute to database security by controlling access to data. These features make stored procedures a valuable tool for administrators and developers aiming to maintain robust, secure, and auditable database systems.
+
+#
+
+### Triggers
+
+Triggers serve as automatic response mechanisms to predefined events within a database, offering a powerful tool for real-time data management. They are instrumental in maintaining data integrity, enforcing business rules, and automating actions based on specific conditions. Let's delve into the significance and capabilities of triggers using an extended example:
+
+```sql
+-- Create Trigger
+CREATE TRIGGER tr_update_inventory
+ON sales
+AFTER INSERT
+AS
+BEGIN
+    -- Validate if sales data is present in the inserted table
+    IF EXISTS (SELECT 1 FROM inserted)
+    BEGIN
+        -- Update inventory based on sales data
+        UPDATE inventory
+        SET quantity = quantity - i.quantity
+        FROM inventory e
+        INNER JOIN inserted i ON e.product_id = i.product_id;
+        
+        -- Log the inventory update for auditing purposes
+        INSERT INTO inventory_log (product_id, old_quantity, new_quantity, updated_at)
+        SELECT i.product_id, e.quantity, e.quantity - i.quantity, GETDATE()
+        FROM inventory e
+        INNER JOIN inserted i ON e.product_id = i.product_id;
+        
+        -- Provide success message
+        PRINT 'Inventory updated successfully.';
+    END
+END;
+```
+
+> ***Note:** Triggers are designed to respond automatically to predefined events (data modifications or changes in the database).*
+
+#
+
+**Enhancements**
+1. **Validation Check:** The trigger now checks if there is actual sales data present in the `inserted` table before proceeding with the update. This ensures that the trigger responds appropriately to valid events.
+
+2. **Audit Logging:** Similar to the stored procedure example, the trigger includes logic to log inventory updates into a separate table (`inventory_log`), capturing essential details for auditing purposes. This contributes to a comprehensive audit trail for data modifications.
+
+3. **Informative Message:** The trigger incorporates a PRINT statement to provide a clear success message after updating the inventory, enhancing feedback for monitoring and troubleshooting purposes.
+
+Triggers, as demonstrated here, extend beyond basic event responses. They enable complex logic execution, including data validation, logging, and communication. When employed judiciously, triggers can significantly contribute to maintaining data consistency, automating routine tasks, and ensuring the database's responsiveness to evolving business requirements.
+
+By integrating stored procedures, triggers, and views into database administration practices, administrators can streamline operations, enforce business logic, and enhance overall database performance.
+
+## Security
+
+Ensuring robust security measures within a database environment is critical to safeguarding sensitive information and maintaining the trust of users. This involves implementing a multifaceted approach, encompassing access control, data protection, and adherence to best practices. Let's delve into key aspects of database security to fortify the integrity and confidentiality of your data.
+
+### Access Control
+
+Access control serves as the cornerstone of database security, playing a pivotal role in overseeing and governing the individuals or entities that can interact with specific resources and execute designated actions. This multifaceted process involves the meticulous definition of user roles, the judicious granting of necessary permissions, and the imposition of restrictions on access to confidential or sensitive data.
+
+The provided SQL example illustrates the creation of a user, LimitedUser, with restricted privileges, showcasing the practical application of access control measures. The creation of a login and user is accompanied by the explicit assignment of permissions, exemplifying the precise allocation of access rights.
+
+```sql
+-- Example: Crafting a User with Restricted Privileges
+CREATE LOGIN LimitedUser WITH PASSWORD = 'SecurePassword';
+CREATE USER LimitedUser FOR LOGIN LimitedUser;
+GRANT SELECT ON dbo.SensitiveTable TO LimitedUser;
+```
+
+In this scenario, LimitedUser is tailored to possess exclusively the permissions required for reading data from a sensitive table, embodying the principle of least privilege. 
+
+This principle dictates that users should be endowed with the minimal access necessary to fulfill their responsibilities, thereby mitigating the potential risks associated with unwarranted or unauthorized access. The emphasis on least privilege becomes a proactive approach in fortifying database security, underscoring the importance of a meticulous and strategic access control framework.
+
+#
+
+### Data Masking
+
+Data masking stands as a crucial technique in bolstering database security, focusing on the concealment of specific data to safeguard sensitive information. This practice becomes especially pivotal in non-production environments or when extending limited access to specific user roles.
+
+```sql
+-- Example: Implementing Data Masking
+CREATE MASKED FUNCTION dbo.MaskPhoneNumber() RETURNS NVARCHAR(12)
+WITH FUNCTION_TYPE = 'partial(3,"XXX-XXX-"),default("XXX-XXX-XXXX")';
+ALTER TABLE Employees ALTER COLUMN PhoneNumber ADD MASKED WITH (FUNCTION = 'dbo.MaskPhoneNumber');
+```
+
+In this practical illustration, a data masking function is employed to partially obscure phone numbers, revealing only the initial three digits. This meticulous approach ensures that even when accessed by users with restricted privileges, sensitive information remains shielded. 
+
+By adopting data masking, organizations fortify their security posture by limiting the exposure of critical data, striking a balance between providing access for operational needs and safeguarding confidentiality. The proactive implementation of data masking aligns with the broader strategy of data protection and aligns with regulatory compliance requirements in various industries.
+
+#
+
+### Encryption
+
+Data encryption plays a pivotal role in the overarching strategy of safeguarding sensitive information, particularly when it comes to securing data during transmission or storage within a database. The process involves leveraging sophisticated algorithms to transform data into a secure format, rendering it unreadable without the corresponding decryption key.
+
+```sql
+-- Example: Securing Data through Encryption
+ALTER TABLE Customers
+ADD EncryptedCreditCard VARBINARY(MAX) ENCRYPTED
+WITH (COLUMN_ENCRYPTION_KEY = MyColumnEncryptionKey,
+ENCRYPTION_TYPE = Deterministic, ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256');
+```
+
+In this practical demonstration, a credit card column undergoes encryption using a designated encryption key. This meticulous approach ensures that, in the event of unauthorized access, the data remains unintelligible without the precise decryption key. By implementing encryption measures, organizations fortify their data security posture, significantly reducing the risk associated with potential breaches. 
+
+Whether data is in transit or at rest, encryption serves as a robust deterrent against unauthorized access, contributing to a comprehensive and resilient data protection framework. This aligns with best practices for information security and is often mandated by regulatory standards to safeguard sensitive data.
+
+#
+
+### Best Practices
+
+Prioritizing security best practices is paramount in establishing and maintaining a resilient and secure database system. Essential elements of a proactive security strategy include consistently updating database software, conducting thorough security audits, and staying abreast of emerging threats.
+
+```sql
+-- Example: Ensuring Regular Password Updates
+ALTER LOGIN LimitedUser WITH PASSWORD = 'NewSecurePassword';
+```
+
+In this scenario, the straightforward yet impactful practice of regularly updating user passwords is demonstrated as a means to bolster security. This approach, when combined with routine reviews of user privileges, vigilant monitoring for suspicious activities, and prompt application of security patches, forms a comprehensive defense strategy against potential threats.
+
+By addressing access control, data masking, encryption, and incorporating security best practices, a robust security framework is established for the database. This not only safeguards sensitive information but also ensures the reliability and integrity of data management systems. 
+
+Proactively implementing these measures demonstrates a commitment to cybersecurity, mitigating risks, and aligning with industry standards for secure data handling. Regularly reassessing and evolving security protocols is essential in the dynamic landscape of cybersecurity to stay one step ahead of potential threats.
 
 
 
-
-
-
+---
 
 
 
